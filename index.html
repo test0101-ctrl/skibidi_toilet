@@ -3,21 +3,27 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Só Para Ti 💌</title>
+  <title>O Nosso Jogo Secreto 💖</title>
   <link rel="stylesheet" href="style.css" />
   <link href="https://fonts.googleapis.com/css2?family=Pacifico&display=swap" rel="stylesheet">
 </head>
 <body>
   <div class="container">
-    <h1 class="title">Olá, Linda! 💖</h1>
-    <p class="message">Fiz este pequeno website só para ti!</p>
-    <button class="reveal-btn">Clica em mim 💌</button>
-    <p class="hidden-message">És absolutamente incrível e tenho muita sorte em te conhecer! 💕</p>
-    <div class="emoji-container"></div>
+    <h1 class="title">Olá, Linda! Tens um mistério para resolver... 🕵️‍♀️</h1>
+    <p class="message">Para descobrires a surpresa, clica nos corações que aparecerem! Cada clique conta!</p>
+    
+    <div class="game-area">
+      </div>
+
+    <p class="click-count">Corações Clicados: <span id="count">0</span></p>
+
+    <div class="hidden-message-wrapper">
+      <p class="hidden-message">És absolutamente incrível e tenho muita sorte em te conhecer! 💕</p>
+    </div>
   </div>
 
-  <div class="hearts"></div>
+  <div class="hearts-background"></div>
 
-  <script src="script.js"></script>
+  <audio id="pop-sound" src="pop.mp3" preload="auto"></audio> <audio id="win-sound" src="win.mp3" preload="auto"></audio> <script src="script.js"></script>
 </body>
 </html>
