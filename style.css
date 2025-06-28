@@ -8,56 +8,56 @@ body {
   justify-content: center;
   align-items: center;
   min-height: 100vh;
-  cursor: default; /* Cursor padrão */
+  cursor: default;
 }
 
 .container {
   text-align: center;
   padding: 50px 30px;
-  background-color: rgba(255, 255, 255, 0.9); /* Um pouco menos transparente */
-  border-radius: 25px; /* Mais arredondado */
-  box-shadow: 0 15px 40px rgba(0, 0, 0, 0.15); /* Sombra mais forte */
+  background-color: rgba(255, 255, 255, 0.9);
+  border-radius: 25px;
+  box-shadow: 0 15px 40px rgba(0, 0, 0, 0.15);
   position: relative;
   transition: transform 0.1s ease-out;
-  max-width: 90%; /* Limita a largura em telas grandes */
-  width: 600px; /* Largura preferencial */
-  z-index: 10; /* Garante que esteja acima dos corações de fundo */
+  max-width: 90%;
+  width: 700px; /* Largura ajustada para a grelha de memória */
+  z-index: 10;
 }
 
 .title {
-  font-size: 3em;
+  font-size: 2.8em; /* Ajustado para caber melhor */
   color: #ff69b4;
   margin-bottom: 20px;
 }
 
 .message {
-  font-size: 1.5em;
+  font-size: 1.4em;
   color: #ff6f91;
   margin-bottom: 30px;
 }
 
-.click-count {
+.matches-count {
   font-size: 1.4em;
   color: #ff69b4;
   margin-top: 20px;
   font-weight: bold;
 }
 
-#count {
-  color: #e53982; /* Cor mais vibrante para o contador */
+#matches, #total-matches {
+  color: #e53982;
 }
 
 .hidden-message-wrapper {
   display: none;
   margin-top: 40px;
-  animation: fadeInFromLeft 1.5s forwards; /* Nova animação de entrada */
+  animation: fadeInFromLeft 1.5s forwards;
 }
 
 .hidden-message {
-  font-size: 1.8em; /* Mensagem maior ao final */
-  color: #e53982; /* Cor mais forte para a mensagem final */
+  font-size: 1.8em;
+  color: #e53982;
   line-height: 1.4;
-  text-shadow: 1px 1px 3px rgba(0,0,0,0.1); /* Sombra de texto suave */
+  text-shadow: 1px 1px 3px rgba(0,0,0,0.1);
 }
 
 @keyframes fadeInFromLeft {
@@ -65,72 +65,62 @@ body {
   to { opacity: 1; transform: translateX(0); }
 }
 
-/* --- Área do Jogo --- */
-.game-area {
-  position: relative;
-  width: 100%;
-  height: 250px; /* Altura fixa para a área do jogo */
-  border: 2px dashed #ffaad4; /* Borda tracejada fofa */
+/* --- Jogo da Memória --- */
+.memory-game-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr); /* 4 colunas */
+  grid-gap: 15px; /* Espaço entre as cartas */
+  padding: 15px;
+  background-color: rgba(255, 255, 255, 0.7);
   border-radius: 15px;
+  box-shadow: inset 0 0 10px rgba(0,0,0,0.1); /* Sombra interna para dar profundidade */
+  max-width: 600px; /* Limita a largura da grelha */
   margin: 0 auto;
-  overflow: hidden; /* Garante que os corações não saiam da área */
-  background-color: rgba(255, 255, 255, 0.6);
 }
 
-.clickable-heart {
-  position: absolute;
-  width: 40px; /* Coração clicável maior */
-  height: 40px;
-  background-color: #ff8cbf; /* Cor mais forte para o coração clicável */
-  transform: rotate(45deg) scale(0.8); /* Começa um pouco menor */
-  border-radius: 8px; /* Pequena borda para dar forma */
+.memory-card {
+  width: 120px; /* Tamanho da carta */
+  height: 120px;
+  perspective: 1000px; /* Para a animação 3D de virar */
   cursor: pointer;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
-  animation: pulse 1s infinite alternate, fadeInAndFloat 2s ease-out forwards; /* Animações de pulso e entrada */
+  position: relative;
+  transition: transform 0.6s; /* Transição para virar a carta */
 }
 
-.clickable-heart::before,
-.clickable-heart::after {
-  content: '';
+.memory-card.flipped {
+  transform: rotateY(180deg); /* Vira a carta */
+}
+
+.memory-card.matched {
+  opacity: 0.5; /* Cartas combinadas ficam mais opacas */
+  cursor: default;
+  transform: scale(0.9) rotateY(180deg); /* Encolhe ligeiramente ao combinar */
+  transition: opacity 0.3s, transform 0.6s;
+}
+
+.card-face {
   position: absolute;
-  width: 40px;
-  height: 40px;
-  background-color: #ff8cbf;
-  border-radius: 50%;
+  width: 100%;
+  height: 100%;
+  backface-visibility: hidden; /* Esconde a face de trás */
+  border-radius: 10px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 3.5em; /* Tamanho dos ícones nas cartas */
+  box-shadow: 0 5px 15px rgba(0,0,0,0.1);
 }
 
-.clickable-heart::before {
-  top: -20px;
-  left: 0;
+.card-front {
+  background-color: #ffaad4; /* Cor da frente da carta (virada para baixo) */
+  transform: rotateY(0deg);
+  border: 3px solid #ff69b4; /* Borda mais destacada */
 }
 
-.clickable-heart::after {
-  left: -20px;
-  top: 0;
-}
-
-/* Animações para o coração clicável */
-@keyframes pulse {
-  0% { transform: rotate(45deg) scale(0.9); }
-  100% { transform: rotate(45deg) scale(1.05); }
-}
-
-@keyframes fadeInAndFloat {
-  from { opacity: 0; transform: rotate(45deg) scale(0.5) translateY(20px); }
-  to { opacity: 1; transform: rotate(45deg) scale(0.8) translateY(0); }
-}
-
-/* Brilhos (sparkles) ao clicar */
-.sparkle {
-  position: absolute;
-  font-size: 1.5em;
-  pointer-events: none;
-  animation: sparkle-fade-out 0.8s forwards;
-}
-
-@keyframes sparkle-fade-out {
-  from { opacity: 1; transform: scale(1) translate(0, 0); }
-  to { opacity: 0; transform: scale(0) translate(var(--x, 0), var(--y, 0)); }
+.card-back {
+  background-color: #ffe1f0; /* Cor do verso da carta (virada para cima) */
+  transform: rotateY(180deg);
+  border: 3px solid #ffc0cb;
 }
 
 /* --- Corações de Fundo --- */
@@ -141,7 +131,7 @@ body {
   width: 100%;
   height: 100%;
   pointer-events: none;
-  z-index: 1; /* Abaixo do conteúdo principal */
+  z-index: 1;
 }
 
 .heart-bg {
@@ -181,12 +171,11 @@ body {
   100% { transform: translateY(-10vh) rotate(45deg); opacity: 0; }
 }
 
-/* Corações de celebração ao final do jogo */
 .heart-celebration {
-  background: #ff4d88 !important; /* Cor mais vibrante */
-  animation: float-celebration 2s ease-out forwards; /* Animação mais rápida */
+  background: #ff4d88 !important;
+  animation: float-celebration 2s ease-out forwards;
   opacity: 1 !important;
-  font-size: 1.2em; /* Para emojis se decidires mudar */
+  font-size: 1.2em;
   transform: rotate(45deg) scale(1);
 }
 
