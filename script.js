@@ -11,26 +11,37 @@ const clicksToWin = 10; // Define quantos corações ela precisa clicar
 
 // Cria um coração clicável
 function createClickableHeart() {
+  // Se já ganhámos, não criamos mais corações clicáveis
+  if (clicks >= clicksToWin) return;
+
   const heart = document.createElement('div');
   heart.classList.add('clickable-heart');
   heart.style.left = `${Math.random() * 80 + 10}%`; // Posição aleatória na largura
   heart.style.top = `${Math.random() * 80 + 10}%`; // Posição aleatória na altura
-  heart.style.animationDelay = `${Math.random() * 0.5}s`; // Pequeno delay para variedade
+  heart.style.animationDelay = `${Math.random() * 0.3}s`; // Pequeno delay para variedade
 
+  // Adiciona o evento de clique diretamente ao coração no momento da sua criação
   heart.addEventListener('click', handleHeartClick);
   gameArea.appendChild(heart);
 
   // Remove o coração após um tempo se não for clicado
   setTimeout(() => {
-    if (heart.parentNode) { // Verifica se ainda está no DOM
+    if (heart.parentNode === gameArea) { // Verifica se ainda está na gameArea
       heart.remove();
+      // Opcional: recriar um coração se um desaparecer sem ser clicado, para manter o jogo ativo
+      if (clicks < clicksToWin) {
+         setTimeout(createClickableHeart, 500); // Cria um novo coração para substituir
+      }
     }
-  }, 3000); // Coração desaparece após 3 segundos
+  }, 2500); // Coração desaparece mais rápido (2.5 segundos) para manter o jogo dinâmico
 }
 
 // Lida com o clique no coração
 function handleHeartClick(event) {
-  if (clicks >= clicksToWin) return; // Impede cliques após a vitória
+  // Para evitar múltiplos cliques rápidos no mesmo coração ou após a vitória
+  if (clicks >= clicksToWin || event.target.dataset.clicked) return;
+
+  event.target.dataset.clicked = 'true'; // Marca o coração como clicado
 
   clicks++;
   clickCountSpan.textContent = clicks;
@@ -40,7 +51,7 @@ function handleHeartClick(event) {
 
   // Animação de "explosão" do coração
   const clickedHeart = event.target;
-  clickedHeart.style.transform = 'scale(1.5)';
+  clickedHeart.style.transform = 'scale(1.5) rotate(45deg)'; // Escala e mantém a rotação
   clickedHeart.style.opacity = '0';
   clickedHeart.style.transition = 'transform 0.2s ease-out, opacity 0.2s ease-out';
 
@@ -49,8 +60,10 @@ function handleHeartClick(event) {
     const sparkle = document.createElement('span');
     sparkle.classList.add('sparkle');
     sparkle.textContent = '✨'; // Ou '💖'
-    sparkle.style.left = `${event.clientX - gameArea.getBoundingClientRect().left}px`;
-    sparkle.style.top = `${event.clientY - gameArea.getBoundingClientRect().top}px`;
+    // Posição do sparkle relativa ao clique e à gameArea
+    const gameAreaRect = gameArea.getBoundingClientRect();
+    sparkle.style.left = `${event.clientX - gameAreaRect.left}px`;
+    sparkle.style.top = `${event.clientY - gameAreaRect.top}px`;
     gameArea.appendChild(sparkle);
 
     sparkle.animate([
@@ -68,8 +81,10 @@ function handleHeartClick(event) {
     clickedHeart.remove();
   }, 200);
 
-  // Gera um novo coração
-  setTimeout(createClickableHeart, 500);
+  // Gera um novo coração, mas apenas se o jogo não tiver terminado
+  if (clicks < clicksToWin) {
+    setTimeout(createClickableHeart, 500); // Gera um novo coração logo após o clique
+  }
 
   // Verifica se o jogo terminou
   if (clicks === clicksToWin) {
@@ -105,7 +120,7 @@ function endGame() {
     }
   }, 100);
 
-  // Opção: adicionar um botão de "repetir" ou "partilhar"
+  // Opcional: adicionar um botão de "repetir" ou "partilhar"
 }
 
 // --- Animação de Corações de Fundo ---
