@@ -3,19 +3,19 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>O Nosso Jogo Secreto 💖</title>
+  <title>O Nosso Jogo da Memória 💖</title>
   <link rel="stylesheet" href="style.css" />
   <link href="https://fonts.googleapis.com/css2?family=Pacifico&display=swap" rel="stylesheet">
 </head>
 <body>
   <div class="container">
-    <h1 class="title">Olá, Linda! Tens um mistério para resolver... 🕵️‍♀️</h1>
-    <p class="message">Para descobrires a surpresa, clica nos corações que aparecerem! Cada clique conta!</p>
+    <h1 class="title">Olá, Linda! Pronta para um desafio de memória? 🧠</h1>
+    <p class="message">Vira as cartas e encontra todos os pares de corações para revelares a tua surpresa!</p>
     
-    <div class="game-area">
+    <div class="memory-game-grid">
       </div>
 
-    <p class="click-count">Corações Clicados: <span id="count">0</span></p>
+    <p class="matches-count">Pares Encontrados: <span id="matches">0</span> / <span id="total-matches"></span></p>
 
     <div class="hidden-message-wrapper">
       <p class="hidden-message">És absolutamente incrível e tenho muita sorte em te conhecer! 💕</p>
@@ -24,6 +24,10 @@
 
   <div class="hearts-background"></div>
 
-  <audio id="pop-sound" src="pop.mp3" preload="auto"></audio> <audio id="win-sound" src="win.mp3" preload="auto"></audio> <script src="script.js"></script>
+  <audio id="flip-sound" src="flip.mp3" preload="auto"></audio>
+  <audio id="match-sound" src="match.mp3" preload="auto"></audio>
+  <audio id="win-sound" src="win.mp3" preload="auto"></audio>
+
+  <script src="script.js"></script>
 </body>
 </html>
