@@ -4,50 +4,63 @@ body {
   background: linear-gradient(to top right, #ffe1f0, #fff0f6);
   font-family: 'Pacifico', cursive;
   overflow: hidden;
+  display: flex; /* Use flexbox for centering */
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh; /* Ensure it takes full viewport height */
 }
 
 .container {
   text-align: center;
-  padding: 100px 20px;
+  padding: 50px 30px; /* Adjusted padding */
+  background-color: rgba(255, 255, 255, 0.8); /* Semi-transparent background for content */
+  border-radius: 20px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1); /* Soft shadow */
+  position: relative; /* For tilt effect */
+  transition: transform 0.1s ease-out; /* Smooth transition for tilt */
 }
 
 .title {
-  font-size: 3em;
+  font-size: 3.5em; /* Slightly larger */
   color: #ff69b4;
+  margin-bottom: 15px;
 }
 
 .message {
-  font-size: 1.5em;
+  font-size: 1.6em; /* Slightly larger */
   color: #ff6f91;
-  margin-bottom: 20px;
+  margin-bottom: 25px;
 }
 
 .reveal-btn {
-  padding: 15px 30px;
-  font-size: 1.2em;
+  padding: 18px 35px; /* Larger button */
+  font-size: 1.3em; /* Larger font */
   background-color: #ffaad4;
   border: none;
-  border-radius: 25px;
+  border-radius: 30px; /* More rounded */
   color: white;
   cursor: pointer;
-  transition: transform 0.3s;
+  transition: transform 0.3s ease-in-out, background-color 0.3s ease; /* Added background transition */
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2); /* Button shadow */
 }
 
 .reveal-btn:hover {
-  transform: scale(1.1);
+  transform: scale(1.1) translateY(-5px); /* Lift and scale */
+  background-color: #ff8cbf; /* Darker pink on hover */
 }
 
 .hidden-message {
-  font-size: 1.3em;
+  font-size: 1.5em; /* Larger font */
   color: #ff69b4;
-  margin-top: 30px;
+  margin-top: 35px; /* More spacing */
   display: none;
-  animation: fadeIn 1s forwards;
+  animation: fadeIn 1.5s forwards; /* Slower fade in */
+  line-height: 1.4; /* Better readability */
 }
 
 @keyframes fadeIn {
-  from { opacity: 0; }
-  to { opacity: 1; }
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
 }
 
 /* Floating hearts */
@@ -58,34 +71,36 @@ body {
   width: 100%;
   height: 100%;
   pointer-events: none;
+  z-index: -1; /* Send hearts to background */
 }
 
 .heart {
   position: absolute;
-  width: 20px;
-  height: 20px;
-  background: pink;
+  width: 25px; /* Slightly larger hearts */
+  height: 25px;
+  background: #ffc0cb; /* Lighter pink */
   transform: rotate(45deg);
-  animation: float 5s infinite;
+  animation: float 5s infinite ease-in-out; /* Smoother animation */
+  opacity: 0.8; /* Slightly transparent */
 }
 
 .heart::before,
 .heart::after {
   content: '';
   position: absolute;
-  width: 20px;
-  height: 20px;
-  background: pink;
+  width: 25px;
+  height: 25px;
+  background: #ffc0cb;
   border-radius: 50%;
 }
 
 .heart::before {
-  top: -10px;
+  top: -12.5px; /* Adjusted for new size */
   left: 0;
 }
 
 .heart::after {
-  left: -10px;
+  left: -12.5px; /* Adjusted for new size */
   top: 0;
 }
 
@@ -94,11 +109,32 @@ body {
     transform: translateY(100vh) rotate(45deg);
     opacity: 0;
   }
-  50% {
-    opacity: 1;
+  25% {
+    opacity: 0.8;
+  }
+  75% {
+    opacity: 0.8;
   }
   100% {
     transform: translateY(-10vh) rotate(45deg);
     opacity: 0;
   }
+}
+
+/* New: Emoji burst styling */
+.emoji-container {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  overflow: hidden; /* Ensure emojis don't break layout */
+}
+
+.burst-emoji {
+  position: absolute;
+  font-size: 2em; /* Size of bursting emojis */
+  opacity: 0;
+  transform: scale(0);
 }
