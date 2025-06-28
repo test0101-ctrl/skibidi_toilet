@@ -4,137 +4,199 @@ body {
   background: linear-gradient(to top right, #ffe1f0, #fff0f6);
   font-family: 'Pacifico', cursive;
   overflow: hidden;
-  display: flex; /* Use flexbox for centering */
+  display: flex;
   justify-content: center;
   align-items: center;
-  min-height: 100vh; /* Ensure it takes full viewport height */
+  min-height: 100vh;
+  cursor: default; /* Cursor padrão */
 }
 
 .container {
   text-align: center;
-  padding: 50px 30px; /* Adjusted padding */
-  background-color: rgba(255, 255, 255, 0.8); /* Semi-transparent background for content */
-  border-radius: 20px;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1); /* Soft shadow */
-  position: relative; /* For tilt effect */
-  transition: transform 0.1s ease-out; /* Smooth transition for tilt */
+  padding: 50px 30px;
+  background-color: rgba(255, 255, 255, 0.9); /* Um pouco menos transparente */
+  border-radius: 25px; /* Mais arredondado */
+  box-shadow: 0 15px 40px rgba(0, 0, 0, 0.15); /* Sombra mais forte */
+  position: relative;
+  transition: transform 0.1s ease-out;
+  max-width: 90%; /* Limita a largura em telas grandes */
+  width: 600px; /* Largura preferencial */
+  z-index: 10; /* Garante que esteja acima dos corações de fundo */
 }
 
 .title {
-  font-size: 3.5em; /* Slightly larger */
+  font-size: 3em;
   color: #ff69b4;
-  margin-bottom: 15px;
+  margin-bottom: 20px;
 }
 
 .message {
-  font-size: 1.6em; /* Slightly larger */
+  font-size: 1.5em;
   color: #ff6f91;
-  margin-bottom: 25px;
+  margin-bottom: 30px;
 }
 
-.reveal-btn {
-  padding: 18px 35px; /* Larger button */
-  font-size: 1.3em; /* Larger font */
-  background-color: #ffaad4;
-  border: none;
-  border-radius: 30px; /* More rounded */
-  color: white;
-  cursor: pointer;
-  transition: transform 0.3s ease-in-out, background-color 0.3s ease; /* Added background transition */
-  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2); /* Button shadow */
+.click-count {
+  font-size: 1.4em;
+  color: #ff69b4;
+  margin-top: 20px;
+  font-weight: bold;
 }
 
-.reveal-btn:hover {
-  transform: scale(1.1) translateY(-5px); /* Lift and scale */
-  background-color: #ff8cbf; /* Darker pink on hover */
+#count {
+  color: #e53982; /* Cor mais vibrante para o contador */
+}
+
+.hidden-message-wrapper {
+  display: none;
+  margin-top: 40px;
+  animation: fadeInFromLeft 1.5s forwards; /* Nova animação de entrada */
 }
 
 .hidden-message {
-  font-size: 1.5em; /* Larger font */
-  color: #ff69b4;
-  margin-top: 35px; /* More spacing */
-  display: none;
-  animation: fadeIn 1.5s forwards; /* Slower fade in */
-  line-height: 1.4; /* Better readability */
+  font-size: 1.8em; /* Mensagem maior ao final */
+  color: #e53982; /* Cor mais forte para a mensagem final */
+  line-height: 1.4;
+  text-shadow: 1px 1px 3px rgba(0,0,0,0.1); /* Sombra de texto suave */
 }
 
-@keyframes fadeIn {
-  from { opacity: 0; transform: translateY(20px); }
-  to { opacity: 1; transform: translateY(0); }
+@keyframes fadeInFromLeft {
+  from { opacity: 0; transform: translateX(-50px); }
+  to { opacity: 1; transform: translateX(0); }
 }
 
-/* Floating hearts */
-.hearts {
+/* --- Área do Jogo --- */
+.game-area {
+  position: relative;
+  width: 100%;
+  height: 250px; /* Altura fixa para a área do jogo */
+  border: 2px dashed #ffaad4; /* Borda tracejada fofa */
+  border-radius: 15px;
+  margin: 0 auto;
+  overflow: hidden; /* Garante que os corações não saiam da área */
+  background-color: rgba(255, 255, 255, 0.6);
+}
+
+.clickable-heart {
+  position: absolute;
+  width: 40px; /* Coração clicável maior */
+  height: 40px;
+  background-color: #ff8cbf; /* Cor mais forte para o coração clicável */
+  transform: rotate(45deg) scale(0.8); /* Começa um pouco menor */
+  border-radius: 8px; /* Pequena borda para dar forma */
+  cursor: pointer;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+  animation: pulse 1s infinite alternate, fadeInAndFloat 2s ease-out forwards; /* Animações de pulso e entrada */
+}
+
+.clickable-heart::before,
+.clickable-heart::after {
+  content: '';
+  position: absolute;
+  width: 40px;
+  height: 40px;
+  background-color: #ff8cbf;
+  border-radius: 50%;
+}
+
+.clickable-heart::before {
+  top: -20px;
+  left: 0;
+}
+
+.clickable-heart::after {
+  left: -20px;
+  top: 0;
+}
+
+/* Animações para o coração clicável */
+@keyframes pulse {
+  0% { transform: rotate(45deg) scale(0.9); }
+  100% { transform: rotate(45deg) scale(1.05); }
+}
+
+@keyframes fadeInAndFloat {
+  from { opacity: 0; transform: rotate(45deg) scale(0.5) translateY(20px); }
+  to { opacity: 1; transform: rotate(45deg) scale(0.8) translateY(0); }
+}
+
+/* Brilhos (sparkles) ao clicar */
+.sparkle {
+  position: absolute;
+  font-size: 1.5em;
+  pointer-events: none;
+  animation: sparkle-fade-out 0.8s forwards;
+}
+
+@keyframes sparkle-fade-out {
+  from { opacity: 1; transform: scale(1) translate(0, 0); }
+  to { opacity: 0; transform: scale(0) translate(var(--x, 0), var(--y, 0)); }
+}
+
+/* --- Corações de Fundo --- */
+.hearts-background {
   position: fixed;
   top: 0;
   left: 0;
   width: 100%;
   height: 100%;
   pointer-events: none;
-  z-index: -1; /* Send hearts to background */
+  z-index: 1; /* Abaixo do conteúdo principal */
 }
 
-.heart {
+.heart-bg {
   position: absolute;
-  width: 25px; /* Slightly larger hearts */
-  height: 25px;
-  background: #ffc0cb; /* Lighter pink */
+  width: 20px;
+  height: 20px;
+  background: #ffc0cb;
   transform: rotate(45deg);
-  animation: float 5s infinite ease-in-out; /* Smoother animation */
-  opacity: 0.8; /* Slightly transparent */
+  animation: float 5s infinite ease-in-out;
+  opacity: 0.7;
 }
 
-.heart::before,
-.heart::after {
+.heart-bg::before,
+.heart-bg::after {
   content: '';
   position: absolute;
-  width: 25px;
-  height: 25px;
+  width: 20px;
+  height: 20px;
   background: #ffc0cb;
   border-radius: 50%;
 }
 
-.heart::before {
-  top: -12.5px; /* Adjusted for new size */
+.heart-bg::before {
+  top: -10px;
   left: 0;
 }
 
-.heart::after {
-  left: -12.5px; /* Adjusted for new size */
+.heart-bg::after {
+  left: -10px;
   top: 0;
 }
 
 @keyframes float {
-  0% {
-    transform: translateY(100vh) rotate(45deg);
-    opacity: 0;
-  }
-  25% {
-    opacity: 0.8;
-  }
-  75% {
-    opacity: 0.8;
-  }
-  100% {
-    transform: translateY(-10vh) rotate(45deg);
-    opacity: 0;
-  }
+  0% { transform: translateY(100vh) rotate(45deg); opacity: 0; }
+  25% { opacity: 0.7; }
+  75% { opacity: 0.7; }
+  100% { transform: translateY(-10vh) rotate(45deg); opacity: 0; }
 }
 
-/* New: Emoji burst styling */
-.emoji-container {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  pointer-events: none;
-  overflow: hidden; /* Ensure emojis don't break layout */
+/* Corações de celebração ao final do jogo */
+.heart-celebration {
+  background: #ff4d88 !important; /* Cor mais vibrante */
+  animation: float-celebration 2s ease-out forwards; /* Animação mais rápida */
+  opacity: 1 !important;
+  font-size: 1.2em; /* Para emojis se decidires mudar */
+  transform: rotate(45deg) scale(1);
 }
 
-.burst-emoji {
-  position: absolute;
-  font-size: 2em; /* Size of bursting emojis */
-  opacity: 0;
-  transform: scale(0);
+.heart-celebration::before,
+.heart-celebration::after {
+  background: #ff4d88 !important;
+}
+
+@keyframes float-celebration {
+  0% { transform: translateY(100vh) rotate(45deg) scale(0.5); opacity: 0; }
+  50% { transform: translateY(50vh) rotate(45deg) scale(1); opacity: 1; }
+  100% { transform: translateY(-10vh) rotate(45deg) scale(0.8); opacity: 0; }
 }
