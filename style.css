@@ -1,0 +1,104 @@
+body {
+  margin: 0;
+  padding: 0;
+  background: linear-gradient(to top right, #ffe1f0, #fff0f6);
+  font-family: 'Pacifico', cursive;
+  overflow: hidden;
+}
+
+.container {
+  text-align: center;
+  padding: 100px 20px;
+}
+
+.title {
+  font-size: 3em;
+  color: #ff69b4;
+}
+
+.message {
+  font-size: 1.5em;
+  color: #ff6f91;
+  margin-bottom: 20px;
+}
+
+.reveal-btn {
+  padding: 15px 30px;
+  font-size: 1.2em;
+  background-color: #ffaad4;
+  border: none;
+  border-radius: 25px;
+  color: white;
+  cursor: pointer;
+  transition: transform 0.3s;
+}
+
+.reveal-btn:hover {
+  transform: scale(1.1);
+}
+
+.hidden-message {
+  font-size: 1.3em;
+  color: #ff69b4;
+  margin-top: 30px;
+  display: none;
+  animation: fadeIn 1s forwards;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+/* Floating hearts */
+.hearts {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+}
+
+.heart {
+  position: absolute;
+  width: 20px;
+  height: 20px;
+  background: pink;
+  transform: rotate(45deg);
+  animation: float 5s infinite;
+}
+
+.heart::before,
+.heart::after {
+  content: '';
+  position: absolute;
+  width: 20px;
+  height: 20px;
+  background: pink;
+  border-radius: 50%;
+}
+
+.heart::before {
+  top: -10px;
+  left: 0;
+}
+
+.heart::after {
+  left: -10px;
+  top: 0;
+}
+
+@keyframes float {
+  0% {
+    transform: translateY(100vh) rotate(45deg);
+    opacity: 0;
+  }
+  50% {
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(-10vh) rotate(45deg);
+    opacity: 0;
+  }
+}
